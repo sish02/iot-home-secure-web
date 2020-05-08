@@ -28,8 +28,8 @@ wss.on('connection', ws => {
             CLIENTS[id] = obj
         } else if (res && res["ID"]) {
             if (res["ID"] !== "WEB") {
-                if (res["ID"] !== "MOTION")
-                    sendNotificationForMotionSensor();
+                if (res["ID"] == "MOTION")
+                    sendNotificationForMotionSensor(res["data"]);
 
                 // Send the data to Front-End
                 if (!CLIENTS["WEB"])
@@ -40,18 +40,25 @@ wss.on('connection', ws => {
         }
     }
 
-    function sendNotificationForMotionSensor() {
-        lastSent = sensors["MOTION"].lastAlert;
-
+    function sendNotificationForMotionSensor(data) {
+        let lastAlert = sensors["MOTION"].lastAlert
+        if ( lastAlert == "NULL" || lastAlert != data["last_time"]){
+            sensors["MOTION"].lastAlert = data["last_time"]
+            sendEmailForMotionSensor(data["image_url"], data["video_url"])
+        }
     }
 });
 
-function sendEmailForMotionSensor() {
+function sendEmailForMotionSensor(img_link, vid_link) {
     var mailOptions = {
         from: 'shukla.1291@gmail.com',
         to: 'sshukl16@asu.edu',
         subject: 'MOTION SENSOR ALERT',
-        text: 'This is an alert triggered by the Motion Sensor'
+        text: `This is an alert triggered by the Motion Sensor
+            Click following link to view captured snapshot and video
+            Image: ${img_link}
+            Video: ${vid_link}
+        `
     };
     sendMail(mailOptions, function (error, info) {
         if (error) {
@@ -61,7 +68,5 @@ function sendEmailForMotionSensor() {
         }
     });
 }
-
-sendEmailForMotionSensor();
 
 server.listen(port);

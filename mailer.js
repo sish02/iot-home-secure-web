@@ -9,11 +9,11 @@ var transporter = nodemailer.createTransport({
   }
 });
 
-var mailOptions = {
-  from: 'shukla.1291@gmail.com',
-  to: 'er.satyavrat@gmail.com',
-  subject: 'FIRE IN YOUR ASSS!!!! :P',
-  text: 'That was easy!'
-};
+// var mailOptions = {
+//   from: 'shukla.1291@gmail.com',
+//   to: 'er.satyavrat@gmail.com',
+//   subject: 'FIRE IN YOUR ASSS!!!! :P',
+//   text: 'That was easy!'
+// };
 
 module.exports = transporter.sendMail.bind(transporter);
