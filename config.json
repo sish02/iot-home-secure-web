@@ -1,0 +1,17 @@
+{
+  "sensors":{
+    "MOTION":{
+      "enabled":true,
+      "lastAlert": "NULL"
+    },
+    "TEMP":{
+      "enabled":true
+    },
+    "SMOKE":{
+      "enabled":true
+    },
+    "FLAME":{
+      "enabled":true
+    }
+  }
+}

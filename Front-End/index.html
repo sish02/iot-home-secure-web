@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Saviour - Home Security App</title>
+    <link rel="icon" href="/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+        integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+        integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+        integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+        crossorigin="anonymous"></script>
+    <script src="./script.js"></script>
+    <script src="https://kit.fontawesome.com/e776f1cf6b.js" crossorigin="anonymous"></script>
+</head>
+<style>
+    html,
+    body {
+        height: 100%;
+    }
+
+    .container {
+        min-height: 100%;
+        padding-top: 10px;
+    }
+
+    .notification {
+        height: 5em;
+    }
+
+    .navbar-brand {
+        font-size: 2.0rem;
+    }
+
+    .card:hover {
+        background-color: #fbe8e1;
+        transition-duration: 200ms;
+    }
+
+    .nav-link.active {
+        border: 0.8px solid white;
+        border-radius: 5px;
+        margin-right: 5px
+    }
+
+    .card {
+        margin-bottom: 30px;
+        border: 3px solid rgba(0, 0, 0, .125)
+    }
+
+    .blinker {
+        -webkit-animation: SENSOR-ALERT 1s infinite;
+        /* Safari 4+ */
+        -moz-animation: SENSOR-ALERT 1s infinite;
+        /* Fx 5+ */
+        -o-animation: SENSOR-ALERT 1s infinite;
+        /* Opera 12+ */
+        animation: SENSOR-ALERT 1s infinite;
+        /* IE 10+, Fx 29+ */
+    }
+
+    @-webkit-keyframes SENSOR-ALERT {
+
+        0%,
+        49% {
+            border: 3px solid #e50000;
+            background-color: lightyellow;
+        }
+    }
+
+    .alert-sign {
+        float: right;
+        color: #e50000;
+    }
+
+    .hide {
+        display: none;
+    }
+</style>
+
+<body>
+    <header class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <!-- Navbar content -->
+        <a class="navbar-brand" href="#"><i class="fab fa-studiovinari"></i>&nbsp;Saviour</a>
+        <!-- <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button> -->
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-items">
+                    <a class="nav-link active" id="btn-sensors" href="#"><i class="fas fa-home"></i>&nbsp;Home <span
+                            class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-items">
+                    <a class="nav-link" id="btn-alerts" href="#"><i class="fas fa-bell"></i>&nbsp;Alerts <span
+                            class="sr-only"></span></a>
+                </li>
+            </ul>
+        </div>
+    </header>
+    <div id="home" class="container" style="background-color: #3c4b5a;">
+        <!-- <div class="notification row">
+            <div class="col-md-12">
+                <div class="alert alert-primary" role="alert">
+                    A simple primary alert—check it out!
+                </div>
+            </div>
+        </div> -->
+
+        <div id="sensors" class="row" style="display: flex;">
+            <div class="col-md-4">
+                <div class="card" style="float: left; height: 35rem;" id="motion-card">
+                    <div class="card-header" style="background-color: #f8d7da;">
+                        <h3 class="my-0 font-weight-bold"><i class="fas fa-play"></i> &nbsp;Motion Sensor
+                            <i class="fas fa-exclamation-triangle alert-sign hide" id="motion-card-sign"></i></h3>
+                    </div>
+                    <div class="card-body">
+                        <!-- <h5 class="card-title">Motion Sensor</h5>
+                        <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6> -->
+                        <p class="card-text">
+                            * No Motion detected status
+                            * Last motion alert timestamp
+                            * Camera feeds in the house - list
+                            * Enable/Disable Motion sensor alarm
+                        </p>
+                            <a href="#" class="btn btn-outline-danger">On/Off Sensor</a>
+                            <a target="_blank" href="http://192.168.0.177/" class="btn btn-outline-primary">CCTV Live</a>
+                            <a href="#" class="btn btn-primary disabled" id="motion-card-btn"
+                                onclick="alertAcknowledge('MOTION')">Alert OFF</a>
+
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-8">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card" style="" id="temp-card">
+                            <div class="card-header" style="background-color: #e2e3e5;">
+                                <h3 class="my-0 font-weight-bold"><i class="fas fa-temperature-low"></i>
+                                    &nbsp;Temperature Sensor</h3>
+                            </div>
+                            <div class="card-body">
+                                <h1 class="card-title pricing-card-title" id="temp-data"></h1>
+                                <!-- <h6 class="text-muted" id="temp-data">Current Temperature: </h6> -->
+                                <p class="card-text">
+                                    * Current Temperature
+                                    * Air Conditioner On or Off
+                                    * Set Temperature
+                                </p>
+                                <a href="#" class="btn btn-outline-primary">On/Off AC</a>
+                                <a href="#" class="card-link">Another link</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="card" style="" id="smoke-card">
+                            <div class="card-header" style="background-color: #cce5ff;">
+                                <h3 class="my-0 font-weight-bold"><i class="fas fa-smoking"></i> &nbsp;Smoke Sensor
+                                    <i class="fas fa-exclamation-triangle alert-sign hide" id="smoke-card-sign"></i>
+                                </h3>
+                            </div>
+                            <div class="card-body">
+                                <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>
+                                <p class="card-text">
+                                    * Current Smoke reading, status
+                                    * Last alert, Location of alert
+
+                                </p>
+                                <a href="#" class="btn btn-outline-primary">Enable/Disable Alarm</a>
+                                <a href="#" class="btn btn-primary disabled" id="smoke-card-btn"
+                                    onclick="alertAcknowledge('SMOKE')">Acknowledge Alert</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="card" style="" id="flame-card">
+                            <div class="card-header" style="background-color: #fef3cd;">
+                                <h3 class="my-0 font-weight-bold"><i class="fas fa-fire"></i> &nbsp;Fire Sensor
+                                    <i class="fas fa-exclamation-triangle alert-sign hide" id="flame-card-sign"></i>
+                                </h3>
+                            </div>
+                            <div class="card-body">
+                                <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>
+                                <p class="card-text">
+                                    * Current status
+                                    * Last alert timestamp, area of house
+                                    *
+                                </p>
+                                <a href="#" class="btn btn-outline-primary">Enable/Disable Alarm</a>
+                                <a href="#" class="btn btn-primary disabled" id="flame-card-btn"
+                                    onclick="alertAcknowledge('FLAME')">Acknowledge Alert</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="alerts" class="row" style="display: none;">
+            <div class="card-deck mb-6 text-center">
+                <div class="card mb-6 shadow-sm">
+                    <div class="card-header">
+                        <h4 class="my-0 font-weight-normal">Free</h4>
+                    </div>
+                    <div class="card-body">
+                        <h1 class="card-title pricing-card-title">$0 <small class="text-muted">/ mo</small></h1>
+                        <ul class="list-unstyled mt-3 mb-4">
+                            <li>10 users included</li>
+                            <li>2 GB of storage</li>
+                            <li>Email support</li>
+                            <li>Help center access</li>
+                        </ul>
+                        <button type="button" class="btn btn-lg btn-block btn-outline-primary">Sign up for free</button>
+                    </div>
+                </div>
+                <div class="card mb-6 shadow-sm">
+                    <div class="card-header">
+                        <h4 class="my-0 font-weight-normal">Pro</h4>
+                    </div>
+                    <div class="card-body">
+                        <h1 class="card-title pricing-card-title">$15 <small class="text-muted">/ mo</small></h1>
+                        <ul class="list-unstyled mt-3 mb-4">
+                            <li>20 users included</li>
+                            <li>10 GB of storage</li>
+                            <li>Priority email support</li>
+                            <li>Help center access</li>
+                        </ul>
+                        <button type="button" class="btn btn-lg btn-block btn-primary">Get started</button>
+                    </div>
+                </div>
+                <div class="card mb-6 shadow-sm">
+                    <div class="card-header">
+                        <h4 class="my-0 font-weight-normal">Enterprise</h4>
+                    </div>
+                    <div class="card-body">
+                        <h1 class="card-title pricing-card-title">$29 <small class="text-muted">/ mo</small></h1>
+                        <ul class="list-unstyled mt-3 mb-4">
+                            <li>30 users included</li>
+                            <li>15 GB of storage</li>
+                            <li>Phone and email support</li>
+                            <li>Help center access</li>
+                        </ul>
+                        <button type="button" class="btn btn-lg btn-block btn-primary">Contact us</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+<script type="text/javascript">
+
+    function notify(data) {
+
+    }
+
+    function navigation() {
+
+    }
+
+    function getContainerId(btnId) {
+        return btnId.replace('btn-', '');
+    }
+
+    $(".nav-link").bind('click', function (e) {
+        for (node of $('.nav-link')) {
+            if (e.target.id == node.id) {
+                $("#" + node.id).addClass('active')
+                $("#" + getContainerId(node.id)).css("display", 'flex')
+            }
+            else {
+                $("#" + node.id).removeClass('active')
+                $("#" + getContainerId(node.id)).css("display", 'none')
+            }
+        }
+    });
+
+    function alertAcknowledge(ID) {
+        id = ID.toLowerCase() + '-card'
+        idBtn = id + '-btn'
+        idSign = id + '-sign'
+        $('#' + id).removeClass('blinker')
+        $('#' + idBtn).addClass('disabled')
+        $('#' + idSign).addClass('hide')
+    }
+
+    function showAlert(data) {
+        id = data["ID"].toLowerCase() + '-card'
+        idBtn = id + '-btn'
+        idSign = id + '-sign'
+        $('#' + id).addClass('blinker')
+        $('#' + idBtn).removeClass('disabled')
+        $('#' + idSign).removeClass('hide')
+    }
+
+    function temperature(data) {
+        $('#temp-data').html(data[0].toFixed(1) + `&#730;C&nbsp;/&nbsp;` + data[1].toFixed(1) + `&#730;F`)
+    }
+
+    function manageData(data) {
+        if (data["ID"] == "TEMP")
+            temperature(data["data"])
+        else
+            showAlert(data)
+    }
+
+    // Websocket connection
+    const socket = new WebSocket("ws://localhost:3000");
+    // Sending id for the client to the server
+    socket.onopen = function (event) {
+        socket.send(JSON.stringify({
+            "__init__": "WEB"
+        }));
+    }
+
+    socket.onmessage = function (event) {
+        console.log("received data: ", event.data)
+        manageData(JSON.parse(event.data))
+    }
+
+
+
+</script>
+
+</html>
